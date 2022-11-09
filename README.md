@@ -1,6 +1,6 @@
 # imitools
 
-Handy image utility built for pytorch & iPython notebooks(supports Google Colab).
+Handy image utility built for pytorch & iPython notebooks (supports Google Colab).
 
 [Watch the following video]()
 
