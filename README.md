@@ -29,3 +29,40 @@ import imitools as I
 ```
 
 Now you can use all the utility functions via the `I` global namespace.
+
+## Examples
+
+```
+# show images
+pt_images = torch.rand(10, 3, 8, 8)
+I.wrap(pt_images).show()
+```
+
+```
+# convert to pil images & wise versa
+I.wrap(pt_images).pil()
+I.wrap(pil_images).pt()
+```
+
+```
+# create an immutable checkpoint for later use
+# here we convert a set of pytorch images to PIL images internally & resize them
+images = I.wrap(pt_images).cpil().resize(256)
+```
+
+```
+# create a video from images
+images.to_video().show()
+```
+
+```
+# save images to disk
+images.to_dir("./path/to/images")
+```
+
+```
+# load images from disk & save to disk
+I.from_dir("./path/to/images").show()
+```
+
+For more usage, check the [tutorial](https://colab.research.google.com/drive/1-MN0M_76kP80SCBn1DPpGFWFSteJLThY?usp=sharing).
