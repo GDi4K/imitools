@@ -19,7 +19,7 @@ Handy image utility built for pytorch & iPython notebooks (supports Google Colab
 ## Installation
 
 ```
-!git clone https://github.com/GDi4K/imitools.git
+!rm -rf ./imitools && git clone https://github.com/GDi4K/imitools.git
 ```
 
 ## Usage
