@@ -2,7 +2,8 @@
 
 Handy image utility built for pytorch & iPython notebooks (supports Google Colab).
 
-[Watch the following video]()
+* [Watch the tutorial on Youtube]()
+* [Play with the Colab Tutorial](https://colab.research.google.com/drive/1-MN0M_76kP80SCBn1DPpGFWFSteJLThY?usp=sharing)
 
 ## Installation
 
