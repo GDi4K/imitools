@@ -46,10 +46,12 @@ class ImageWrapper:
         if self.image_type != "pil":
             raise Exception("resize() only applied for pil images")
             
-        if isinstance(size, int):
+        if not isinstance(size, tuple):
             size = (size, size)
             
-        new_images = [im.resize(size, **kwargs) for im in self.data]
+        i_size = (int(size[0]), int(size[1]))
+            
+        new_images = [im.resize(i_size, **kwargs) for im in self.data]
         return ImageWrapper(new_images, "pil")
     
     def normalize(self) -> ImageWrapper:
@@ -194,14 +196,14 @@ def wrap(input_data) -> ImageWrapper:
         if len(input_data.shape) == 3:
             input_data = input_data.unsqueeze(0)
             
-        return ImageWrapper(input_data.detach(), "pt")
+        return ImageWrapper(input_data.detach().float(), "pt")
     
     if isinstance(input_data, Image.Image):
         return ImageWrapper([input_data], "pil")
     
     if isinstance(input_data, list):
         if isinstance(input_data[0], torch.Tensor):
-            images = torch.stack(input_data).squeeze(1).detach()
+            images = torch.stack(input_data).squeeze(1).detach().float()
             return ImageWrapper(images, "pt")
         
         if isinstance(input_data[0], Image.Image):
@@ -209,7 +211,7 @@ def wrap(input_data) -> ImageWrapper:
         
         if isinstance(input_data[0], ImageWrapper):
             image_list = list(map(lambda w: w.pt(), input_data))
-            images = torch.stack(image_list).squeeze(1).detach()
+            images = torch.stack(image_list).squeeze(1).detach().float()
             return ImageWrapper(images, "pt")
     
     raise Exception("not implemented!")                        
