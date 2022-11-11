@@ -233,7 +233,7 @@ def from_path(input_data) -> ImageWrapper:
     return ImageWrapper([pil_image], "pil")
                         
 
-class DynaPlot:
+class LivePlotter:
     def __init__(self, cols=2, figsize=(15, 4)):
         fig, subplots = plt.subplots(1, cols, figsize=(20, 5))
         fig.patch.set_facecolor("white")
@@ -298,8 +298,8 @@ class DynaPlot:
     def close(self):
         plt.close()
     
-def dplot(**kwargs) -> DynaPlot:
-    return DynaPlot(**kwargs)
+def live_plot(*args, **kwargs) -> LivePlotter:
+    return LivePlotter(*args, **kwargs)
 
 # class ImiTools:
 #     def __init__(self):
@@ -314,8 +314,8 @@ def dplot(**kwargs) -> DynaPlot:
 #     def from_dir(self, path) -> ImageWrapper:
 #         return from_dir(path)
     
-#     def dplot(self, **kwargs) -> DynaPlot:
-#         return dplot(**kwargs)
+#     def live_plot(self, *args, **kwargs) -> LivePlotter:
+#         return live_plot(*args, **kwargs)
     
 # I = ImiTools()
 # I.defaults.device = device
