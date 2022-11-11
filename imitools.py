@@ -43,29 +43,32 @@ class ImageWrapper:
         self.image_type = image_type
         
     def resize(self, size=(256, 256), **kwargs) -> ImageWrapper:
+        ref = self
         if self.image_type != "pil":
-            raise Exception("resize() only applied for pil images")
+            ref = ref.cpil()
             
         if not isinstance(size, tuple):
             size = (size, size)
             
         i_size = (int(size[0]), int(size[1]))
             
-        new_images = [im.resize(i_size, **kwargs) for im in self.data]
+        new_images = [im.resize(i_size, **kwargs) for im in ref.data]
         return ImageWrapper(new_images, "pil")
     
     def normalize(self) -> ImageWrapper:
+        ref = self
         if self.image_type != "pt":
-            raise Exception("normalize() only applied for pytorch tensors")
+            ref = self.cpt()
         
-        normalized = (self.data - self.data.min()) / (self.data.max() - self.data.min())
+        normalized = (ref.data - ref.data.min()) / (ref.data.max() - ref.data.min())
         return ImageWrapper(normalized, "pt")
     
     def sinrange(self) -> ImageWrapper:
+        ref = self
         if self.image_type != "pt":
-            raise Exception("sinrange() only applied for pytorch tensors")
+            ref = self.cpt()
         
-        return ImageWrapper(self.data * 2 - 1, "pt")
+        return ImageWrapper(ref.data * 2 - 1, "pt")
         
     def pil(self) -> Image:
         if self.image_type == "pil":
@@ -147,13 +150,14 @@ class ImageWrapper:
                         ax[row][col].axis("off")
                         
     def to_dir(self, output_dir, prefix="image", max_workers=min(10, os.cpu_count())):
+        ref = self
         if self.image_type != "pil":
-            raise Exception("to_dir() only applied for pil images")
+            ref = self.cpil()
             
         dir_path = Path(output_dir)
         dir_path.mkdir(exist_ok=True, parents=True)
         
-        images = self.data
+        images = ref.data
 
         def save_image(i):
             try:
