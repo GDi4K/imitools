@@ -2,8 +2,7 @@
 
 Handy image utility built for pytorch & iPython notebooks (supports Google Colab).
 
-* [Watch the tutorial on Youtube]()
-* [Play with the Colab Tutorial](https://colab.research.google.com/drive/1-MN0M_76kP80SCBn1DPpGFWFSteJLThY?usp=sharing)
+* Play with the Tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
 
 ## Features
 
@@ -65,4 +64,4 @@ images.to_dir("./path/to/images")
 I.from_dir("./path/to/images").show()
 ```
 
-For more usage, check the [tutorial](https://colab.research.google.com/drive/1-MN0M_76kP80SCBn1DPpGFWFSteJLThY?usp=sharing).
+For more usage, check the tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
