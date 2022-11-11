@@ -104,8 +104,10 @@ class ImageWrapper:
     def cpt(self) -> ImageWrapper:
         return ImageWrapper(self.pt(), "pt")
     
-    def show(self, cmap=None, figsize=None, cols=6, max_count=36, scale=2.5, captions=True):        
+    def show(self, cmap=None, figsize=None, cols=6, max_count=36, scale=-1, captions=True):        
         if len(self.data) == 1:
+            scale = 4 if scale == -1 else scale
+            plt.figure(figsize=(scale, scale))
             plt.axis("off")
             if self.image_type == "pil":
                 plt.imshow(self.data[0], cmap=cmap)
@@ -114,6 +116,7 @@ class ImageWrapper:
                 
             return
         
+        scale = 2.5 if scale == -1 else scale
         images = self.data.cpu() if self.image_type == "pt" else self.data
         image_count = len(self.data)
         
