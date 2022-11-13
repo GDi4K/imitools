@@ -404,7 +404,7 @@ def download(image_urls):
             continue
         images.append(image)
         
-    return I.wrap(images)
+    return wrap(images)
 
 # class ImiTools:
 #     def __init__(self):
