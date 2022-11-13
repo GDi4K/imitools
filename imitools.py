@@ -9,13 +9,43 @@ from pathlib import Path
 from IPython.display import  display, HTML
 from base64 import b64encode
 import os
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import io
+import requests
+import tempfile
 
 class ImageDefaults:
     def __init__(self):
         self.device = "cpu"
         
 defaults = ImageDefaults()
+
+def download_image(img_url):
+    image = None
+    try:
+        buffer = tempfile.SpooledTemporaryFile(max_size=1e9)
+        r = requests.get(img_url, stream=True)
+        if r.status_code == 200:
+            for chunk in r.iter_content(chunk_size=1024):
+                buffer.write(chunk)
+            buffer.seek(0)
+            image = Image.open(io.BytesIO(buffer.read()))
+        buffer.close()
+        return image
+    except:
+        return image
+    
+def thread_loop(fn, input_array, n_workers=min(10, os.cpu_count())):        
+    return_data = []
+    
+    with ThreadPoolExecutor(n_workers) as executor:
+        futures = [executor.submit(fn, input_item) for input_item in input_array]
+        
+        for future in as_completed(futures):
+            result = future.result()
+            return_data.append(result)
+            
+    return return_data
 
 class VideoWrapper:
     def __init__(self, video_path, video_size):
@@ -168,10 +198,10 @@ class ImageWrapper:
                 images[i].save(path)
             except Exception as e:
                 print("image saving error:", e)
+        
+        thread_loop(save_image, range(len(images)))
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            executor.map(save_image, range(len(images)), timeout=60)
-            
+
     def to_video(self, out_path=None, frame_rate=12):
         ref = self
         if self.image_type == "pt":
@@ -226,12 +256,14 @@ def wrap(input_data) -> ImageWrapper:
 def from_dir(dir_path) -> ImageWrapper:
     file_list = [f for f in Path(dir_path).iterdir() if not f.is_dir()]
     image_list = []
-
-    for f in file_list:
+    
+    def read_image(f):
         try:
             image_list.append(Image.open(f).convert("RGB"))
         except UnidentifiedImageError:
             None
+            
+    thread_loop(read_image, file_list)
             
     return ImageWrapper(image_list, "pil")
 
@@ -308,6 +340,19 @@ class LivePlotter:
 def live_plot(*args, **kwargs) -> LivePlotter:
     return LivePlotter(*args, **kwargs)
 
+def download(image_urls):
+    if isinstance(image_urls, str):
+        image_urls = [image_urls]
+    
+    result_list = thread_loop(download_image, image_urls)
+    images = []
+    for image in result_list:
+        if image is None:
+            continue
+        images.append(image)
+        
+    return I.wrap(images)
+
 # class ImiTools:
 #     def __init__(self):
 #         self.defaults = defaults
@@ -323,6 +368,9 @@ def live_plot(*args, **kwargs) -> LivePlotter:
     
 #     def live_plot(self, *args, **kwargs) -> LivePlotter:
 #         return live_plot(*args, **kwargs)
+    
+#     def download(self, img_urls) -> ImageWrapper:
+#         return download(img_urls)
     
 # I = ImiTools()
 # I.defaults.device = device
