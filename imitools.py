@@ -420,6 +420,25 @@ def download(image_urls):
         
     return wrap(images)
 
+def merge(*args):
+    args = list(args)
+    if isinstance(args[0], list) and not isinstance(args[0][0], Image.Image):
+        args = args[0]
+        
+    wrappers = [wrap(i) for i in args]
+        
+    if wrappers[0].image_type == "pil":
+        images = []
+        for w in wrappers:
+            for i in w.pil():
+                images.append(i)
+                
+        return ImageWrapper(images, "pil")
+    
+    if wrappers[0].image_type == "pt":
+        tensor_list = [w.pt() for w in wrappers]
+        return ImageWrapper(torch.cat(tensor_list, dim=0), "pt")
+
 # class ImiTools:
 #     def __init__(self):
 #         self.defaults = defaults
@@ -438,6 +457,9 @@ def download(image_urls):
     
 #     def download(self, img_urls) -> ImageWrapper:
 #         return download(img_urls)
+    
+#     def merge(self, *args) -> ImageWrapper:
+#         return merge(*args)
     
 # I = ImiTools()
 # I.defaults.device = device
