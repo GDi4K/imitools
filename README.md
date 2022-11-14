@@ -1,19 +1,28 @@
-# imitools
+# ImiTools
 
-Handy image utility built for pytorch & iPython notebooks (supports Google Colab).
+Boilerplate free Image toolkit for PyTorch notebooks.
+Make one-liners like this. 
+
+```
+I.download(some_image_urls).crop(224).show()
+I.download(some_image_urls).to_dir("/path/to/images")
+pytorch_images = I.from_dir("path/to/images").resize(256).pt()
+images = I.wrap(pytorch_images ).crop(224)
+images.show()
+pil_images = images.pick(0, 3, 4).normalize().pil()
+I.merge(images, pil_images, pytorch_images, pil_images[0]).resize(128).to_dir("thumbs")
+```
 
 * Play with the Tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
 
-## Features
+## Why?
 
-* Work with PIL images & Pytorch images
-* Convert into each other as needed
-* Zero boilterplate & fast workflow
-* Show images inside the notebook
-* Create a video from images
-* Resize images easily
-* Immutable workflow & create checkpoints
-* Easy dyanmic plotting support for realtime feedback for long running tasks
+![ImiTools Architecture](https://user-images.githubusercontent.com/50838/201624511-75381c76-8c2b-4e51-96e8-910ee62b3a24.png)
+
+- Bring in images from all sources into a single place like PyTorch images, PIL images, Disk, or Internet
+- Apply various transformations like crop, resize, normalization, etc
+- Then output them as you like including displaying, PyTorch tensors, inline video, and to disk.
+- Imagine all those things without some boilerplate free code and one-liners
 
 ## Installation
 
@@ -29,39 +38,8 @@ import imitools as I
 
 Now you can use all the utility functions via the `I` global namespace.
 
-## Examples
-
-```
-# show images
-pt_images = torch.rand(10, 3, 8, 8)
-I.wrap(pt_images).show()
-```
-
-```
-# convert to pil images & wise versa
-I.wrap(pt_images).pil()
-I.wrap(pil_images).pt()
-```
-
-```
-# create an immutable checkpoint for later use
-# here we convert a set of pytorch images to PIL images internally & resize them
-images = I.wrap(pt_images).cpil().resize(256)
-```
-
-```
-# create a video from images
-images.to_video().show()
-```
-
-```
-# save images to disk
-images.to_dir("./path/to/images")
-```
-
-```
-# load images from disk & save to disk
-I.from_dir("./path/to/images").show()
-```
+## Tutorials
 
 For more usage, check the tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
+
+You can also look at the [source code](./imitools.py) for more info.
