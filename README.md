@@ -3,7 +3,7 @@
 Boilerplate free Image toolkit for PyTorch notebooks.
 Make one-liners like this. 
 
-```
+```python
 I.download(some_image_urls).crop(224).show()
 I.download(some_image_urls).to_dir("/path/to/images")
 pytorch_images = I.from_dir("path/to/images").resize(256).pt()
