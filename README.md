@@ -13,7 +13,7 @@ pil_images = images.pick(0, 3, 4).normalize().pil()
 I.merge(images, pil_images, pytorch_images, pil_images[0]).resize(128).to_dir("thumbs")
 ```
 
-* Play with the Tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
+> Play with the Tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
 
 ## Why?
 
@@ -23,6 +23,8 @@ I.merge(images, pil_images, pytorch_images, pil_images[0]).resize(128).to_dir("t
 - Apply various transformations like crop, resize, normalization, etc
 - Then output them as you like including displaying, PyTorch tensors, inline video, and to disk.
 - Imagine all those things without some boilerplate free code and one-liners
+
+> Play with the Tutorial: [Colab](https://colab.research.google.com/github/GDi4K/imitools/blob/main/docs/tutorial.ipynb), [GitHub](./docs/tutorial.ipynb)
 
 ## Installation
 
