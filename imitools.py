@@ -430,7 +430,8 @@ def merge(*args):
     if wrappers[0].image_type == "pil":
         images = []
         for w in wrappers:
-            for i in w.pil():
+            convered = w.cpil()
+            for i in convered.data:
                 images.append(i)
                 
         return ImageWrapper(images, "pil")
