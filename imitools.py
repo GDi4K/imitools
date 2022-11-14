@@ -146,6 +146,20 @@ class ImageWrapper:
         normalized = (ref.data - ref.data.min()) / (ref.data.max() - ref.data.min())
         return ImageWrapper(normalized, "pt")
     
+    def pick(self, *args):
+        if len(args) == 0:
+            raise Exception("provide some indexes to pick")
+
+        indexes = list(args)
+        if isinstance(args[0], list):
+            indexes = args[0]
+
+        if self.image_type == "pil":
+            return ImageWrapper([self.data[i] for i in indexes], "pil")
+        
+        if self.image_type == "pt":
+            return ImageWrapper(self.data[indexes], "pt")
+    
     def sinrange(self) -> ImageWrapper:
         ref = self
         if self.image_type != "pt":
