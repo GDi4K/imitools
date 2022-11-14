@@ -17,7 +17,7 @@ I.merge(images, pil_images, pytorch_images, pil_images[0]).resize(128).to_dir("t
 
 ## Why?
 
-![ImiTools Architecture](https://user-images.githubusercontent.com/50838/201624511-75381c76-8c2b-4e51-96e8-910ee62b3a24.png)
+![ImiTools Architecture](https://user-images.githubusercontent.com/50838/201626247-7975a670-d727-49cb-b93d-b355f710391d.png)
 
 - Bring in images from all sources into a single place like PyTorch images, PIL images, Disk, or Internet
 - Apply various transformations like crop, resize, normalization, etc
