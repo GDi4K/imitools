@@ -108,9 +108,10 @@ class VideoWrapper:
         """ % data_url)
 
 class ImageWrapper:
-    def __init__(self, data, image_type):
+    def __init__(self, data, image_type, labels=None):
         self.data = data
         self.image_type = image_type
+        self.labels = list(range(len(data))) if labels is None else labels
         
     def resize(self, size=(256, 256), **kwargs) -> ImageWrapper:
         ref = self
@@ -215,6 +216,7 @@ class ImageWrapper:
         
         scale = 2.5 if scale == -1 else scale
         images = self.data.cpu() if self.image_type == "pt" else self.data
+        labels = self.labels
         image_count = len(self.data)
         
         if image_count > max_count:
@@ -236,7 +238,7 @@ class ImageWrapper:
                 image = images[i] if self.image_type == "pil" else images[i].permute(1, 2, 0)
                 ax[i].imshow(image)
                 ax[i].axis("off")
-                if captions: ax[i].set_title(f"{i}")
+                if captions: ax[i].set_title(f"{labels[i]}")
         else:
             for row in range(rows):
                 for col in range(cols):
@@ -245,7 +247,7 @@ class ImageWrapper:
                         image = images[i] if self.image_type == "pil" else images[i].permute(1, 2, 0)
                         ax[row][col].imshow(image)
                         ax[row][col].axis("off")
-                        if captions: ax[row][col].set_title(f"{i}")
+                        if captions: ax[row][col].set_title(f"{labels[i]}")
                     else:
                         ax[row][col].axis("off")
                         
@@ -292,7 +294,7 @@ class ImageWrapper:
     
         return VideoWrapper(video_path, video_size)
 
-def wrap(input_data) -> ImageWrapper:
+def wrap(input_data, labels=None) -> ImageWrapper:
     if isinstance(input_data, ImageWrapper):
         return input_data
     
@@ -300,23 +302,23 @@ def wrap(input_data) -> ImageWrapper:
         if len(input_data.shape) == 3:
             input_data = input_data.unsqueeze(0)
             
-        return ImageWrapper(input_data.detach().float(), "pt")
+        return ImageWrapper(input_data.detach().float(), "pt", labels)
     
     if isinstance(input_data, Image.Image):
-        return ImageWrapper([input_data], "pil")
+        return ImageWrapper([input_data], "pil", labels)
     
     if isinstance(input_data, list):
         if isinstance(input_data[0], torch.Tensor):
             images = torch.stack(input_data).squeeze(1).detach().float()
-            return ImageWrapper(images, "pt")
+            return ImageWrapper(images, "pt", labels)
         
         if isinstance(input_data[0], Image.Image):
-            return ImageWrapper(input_data, "pil")
+            return ImageWrapper(input_data, "pil", labels)
         
         if isinstance(input_data[0], ImageWrapper):
             image_list = list(map(lambda w: w.pt(), input_data))
             images = torch.stack(image_list).squeeze(1).detach().float()
-            return ImageWrapper(images, "pt")
+            return ImageWrapper(images, "pt", labels)
     
     raise Exception("not implemented!")                        
                         
@@ -444,8 +446,8 @@ def merge(*args):
 #     def __init__(self):
 #         self.defaults = defaults
         
-#     def wrap(self, path) -> ImageWrapper:
-#         return wrap(path)
+#     def wrap(self, data, labels=None) -> ImageWrapper:
+#         return wrap(data, labels)
                         
 #     def from_path(self, path) -> ImageWrapper:
 #         return from_path(path)
