@@ -236,7 +236,7 @@ class ImageWrapper:
         if (rows == 1):
             for i in range(image_count):
                 image = images[i] if self.image_type == "pil" else images[i].permute(1, 2, 0)
-                ax[i].imshow(image)
+                ax[i].imshow(image, cmap=cmap)
                 ax[i].axis("off")
                 if captions: ax[i].set_title(f"{labels[i]}")
         else:
@@ -245,7 +245,7 @@ class ImageWrapper:
                     i = row * cols + col
                     if i < image_count:
                         image = images[i] if self.image_type == "pil" else images[i].permute(1, 2, 0)
-                        ax[row][col].imshow(image)
+                        ax[row][col].imshow(image, cmap=cmap)
                         ax[row][col].axis("off")
                         if captions: ax[row][col].set_title(f"{labels[i]}")
                     else:
@@ -299,6 +299,9 @@ def wrap(input_data, labels=None) -> ImageWrapper:
         return input_data
     
     if isinstance(input_data, torch.Tensor):
+        if len(input_data.shape) == 2:
+            input_data = input_data.unsqueeze(0).unsqueeze(0)
+            
         if len(input_data.shape) == 3:
             input_data = input_data.unsqueeze(0)
             
