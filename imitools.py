@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import io
 import requests
 import tempfile
+from duckduckgo_search import ddg_images
 
 class ImageDefaults:
     def __init__(self):
@@ -444,6 +445,17 @@ def merge(*args):
     if wrappers[0].image_type == "pt":
         tensor_list = [w.pt() for w in wrappers]
         return ImageWrapper(torch.cat(tensor_list, dim=0), "pt")
+
+_last_search_wrapper = None;
+
+def search_images(prompt, max_results=10):
+    image_urls = [item['image'] for item in ddg_images(prompt, max_results=max_results)]
+    global _last_search_wrapper
+    _last_search_wrapper = download(image_urls)
+    return _last_search_wrapper
+
+def search_history():
+    return _last_search_wrapper
 
 # class ImiTools:
 #     def __init__(self):
