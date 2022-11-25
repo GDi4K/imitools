@@ -31,6 +31,7 @@ I.merge(images, pil_images, pytorch_images, pil_images[0]).resize(128).to_dir("t
 
 ```
 !rm -rf ./imitools && git clone https://github.com/GDi4K/imitools.git
+!pip install -q duckduckgo_search
 ```
 
 ## Usage
