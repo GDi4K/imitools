@@ -4,12 +4,18 @@ Boilerplate free Image toolkit for PyTorch notebooks.
 Make one-liners like this. 
 
 ```python
+I.search_images("Cats & Dogs").show()
+I.search_history().crop(224).pt()
+
 I.download(some_image_urls).crop(224).show()
 I.download(some_image_urls).to_dir("/path/to/images")
+
 pytorch_images = I.from_dir("path/to/images").resize(256).pt()
 images = I.wrap(pytorch_images ).crop(224)
 images.show()
+
 pil_images = images.pick(0, 3, 4).normalize().pil()
+
 I.merge(images, pil_images, pytorch_images, pil_images[0]).resize(128).to_dir("thumbs")
 ```
 
